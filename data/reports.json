@@ -1,0 +1,28 @@
+{
+  "reports": [
+    {
+      "date": "2024-01-10",
+      "campaignId": 100001,
+      "impressions": 15000,
+      "clicks": 450,
+      "cost": 225.00,
+      "conversions": 12
+    },
+    {
+      "date": "2024-01-11",
+      "campaignId": 100001,
+      "impressions": 18000,
+      "clicks": 520,
+      "cost": 260.00,
+      "conversions": 15
+    },
+    {
+      "date": "2024-01-10",
+      "campaignId": 100002,
+      "impressions": 8000,
+      "clicks": 200,
+      "cost": 100.00,
+      "conversions": 5
+    }
+  ]
+}

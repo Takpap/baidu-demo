@@ -1,0 +1,31 @@
+{
+  "keywords": [
+    {
+      "keywordId": 300001,
+      "adgroupId": 200001,
+      "keyword": "百度推广",
+      "matchType": 1,
+      "price": 4.50,
+      "status": 1,
+      "createTime": "2024-01-03 10:00:00"
+    },
+    {
+      "keywordId": 300002,
+      "adgroupId": 200001,
+      "keyword": "网络营销",
+      "matchType": 2,
+      "price": 3.00,
+      "status": 1,
+      "createTime": "2024-01-03 10:05:00"
+    },
+    {
+      "keywordId": 300003,
+      "adgroupId": 200002,
+      "keyword": "如何做网络推广",
+      "matchType": 3,
+      "price": 1.50,
+      "status": 1,
+      "createTime": "2024-01-03 11:00:00"
+    }
+  ]
+}

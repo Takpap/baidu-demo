@@ -1,0 +1,22 @@
+{
+  "trackingUrls": [
+    {
+      "trackingId": 500001,
+      "campaignId": 100001,
+      "trackingName": "官网落地页监测",
+      "trackingUrl": "https://example.com/landing?utm_source=baidu&utm_medium=cpc&utm_campaign={campaignid}&utm_content={creative}&utm_term={keyword}",
+      "trackingType": 1,
+      "status": 1,
+      "createTime": "2024-01-05 10:00:00"
+    },
+    {
+      "trackingId": 500002,
+      "campaignId": 100001,
+      "trackingName": "活动页监测",
+      "trackingUrl": "https://example.com/promo?bd_vid={bd_vid}&callback={callback}",
+      "trackingType": 2,
+      "status": 1,
+      "createTime": "2024-01-05 11:00:00"
+    }
+  ]
+}

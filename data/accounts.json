@@ -1,0 +1,12 @@
+{
+  "accounts": [
+    {
+      "userId": 10001,
+      "userName": "demo_user",
+      "balance": 50000.00,
+      "budget": 1000.00,
+      "status": 1,
+      "createTime": "2024-01-01 10:00:00"
+    }
+  ]
+}

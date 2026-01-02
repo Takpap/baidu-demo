@@ -1,0 +1,13 @@
+{
+  "name": "baidu-marketing-demo",
+  "version": "1.0.0",
+  "description": "模拟百度营销平台 API Demo",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "bun run src/app.js",
+    "dev": "bun run --watch src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

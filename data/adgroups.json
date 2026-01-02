@@ -1,0 +1,28 @@
+{
+  "adgroups": [
+    {
+      "adgroupId": 200001,
+      "campaignId": 100001,
+      "adgroupName": "核心词单元",
+      "maxPrice": 5.00,
+      "status": 1,
+      "createTime": "2024-01-02 10:00:00"
+    },
+    {
+      "adgroupId": 200002,
+      "campaignId": 100001,
+      "adgroupName": "长尾词单元",
+      "maxPrice": 2.00,
+      "status": 1,
+      "createTime": "2024-01-02 11:00:00"
+    },
+    {
+      "adgroupId": 200003,
+      "campaignId": 100002,
+      "adgroupName": "促销单元",
+      "maxPrice": 3.50,
+      "status": 1,
+      "createTime": "2024-03-02 09:00:00"
+    }
+  ]
+}
