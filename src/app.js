@@ -38,6 +38,13 @@ app.use('/api/tracking', trackingRouter);
 app.use('/api/promotion-url', promotionUrlRouter);
 app.use('/api/click', clickRouter);
 
+// 落地页路由 - 接收百度监测参数并记录
+const landingRouter = require('./routes/landing');
+app.use('/landing', landingRouter);
+app.use('/promo', landingRouter);
+app.use('/product', landingRouter);
+app.use('/sale', landingRouter);
+
 // 模拟获取 token
 app.post('/api/auth/token', (req, res) => {
   const { username, password } = req.body;
