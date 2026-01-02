@@ -2,8 +2,14 @@ const express = require('express');
 const router = express.Router();
 const { readData, writeData } = require('../utils/dataStore');
 
+// 引入自动回传函数
+let autoUploadConversion = null;
+router.setAutoUpload = (fn) => {
+  autoUploadConversion = fn;
+};
+
 // 落地页处理 - 记录百度监测参数并展示页面
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   // 记录点击数据
   const data = readData('clicks.json');
 
@@ -40,6 +46,16 @@ router.get('/', (req, res) => {
 
   data.clicks.push(clickRecord);
   writeData('clicks.json', data);
+
+  // 触发自动回传
+  let autoUploadResult = null;
+  if (autoUploadConversion && (clickRecord.bd_vid || clickRecord.ext_info)) {
+    try {
+      autoUploadResult = await autoUploadConversion(clickRecord);
+    } catch (e) {
+      console.error('[自动回传] 错误:', e.message);
+    }
+  }
 
   // 返回落地页HTML
   const pageTitles = {

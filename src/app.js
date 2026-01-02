@@ -42,6 +42,8 @@ app.use('/api/conversion', conversionRouter);
 
 // 落地页路由 - 接收百度监测参数并记录
 const landingRouter = require('./routes/landing');
+// 连接自动回传功能
+landingRouter.setAutoUpload(conversionRouter.autoUploadConversion);
 app.use('/landing', landingRouter);
 app.use('/promo', landingRouter);
 app.use('/product', landingRouter);

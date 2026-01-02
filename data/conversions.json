@@ -21,5 +21,10 @@
   "config": {
     "token": "qLZl74UWBEDy9hyLb9UKLSIKkwJolvaa@69kOqjSXAx1st1VORXZykLkIRLRyivcz",
     "apiUrl": "https://ocpc.baidu.com/ocpcapi/api/uploadConvertData"
+  },
+  "autoUpload": {
+    "enabled": true,
+    "types": [4, 10, 93],
+    "delay": 0
   }
 }

@@ -36,6 +36,116 @@ router.post('/config', (req, res) => {
   res.json({ code: 0, message: 'success' });
 });
 
+// 获取自动回传配置
+router.get('/auto-upload/config', (req, res) => {
+  const data = readData('conversions.json');
+  res.json({
+    code: 0,
+    message: 'success',
+    data: data.autoUpload || { enabled: false, types: [], delay: 0 }
+  });
+});
+
+// 保存自动回传配置
+router.post('/auto-upload/config', (req, res) => {
+  const { enabled, types, delay } = req.body;
+  const data = readData('conversions.json');
+  data.autoUpload = {
+    enabled: enabled !== undefined ? enabled : false,
+    types: Array.isArray(types) ? types.map(t => parseInt(t)) : [],
+    delay: parseInt(delay) || 0
+  };
+  writeData('conversions.json', data);
+  res.json({ code: 0, message: 'success' });
+});
+
+// 自动回传处理函数（供landing.js调用）
+async function autoUploadConversion(click) {
+  const data = readData('conversions.json');
+  const autoConfig = data.autoUpload;
+  const token = data.config?.token;
+
+  // 检查是否启用自动回传
+  if (!autoConfig?.enabled || !token) {
+    return null;
+  }
+
+  // 检查是否有配置的转化类型
+  if (!autoConfig.types || autoConfig.types.length === 0) {
+    return null;
+  }
+
+  // 检查点击记录是否有必要的参数
+  if (!click.bd_vid && !click.ext_info) {
+    return null;
+  }
+
+  // 构建logidUrl
+  let logidUrl = '';
+  if (click.bd_vid) {
+    logidUrl = `https://baidu.tempocc.cn${click.landingPath || '/landing'}?bd_vid=${click.bd_vid}`;
+  } else if (click.ext_info) {
+    logidUrl = `https://baidu.tempocc.cn${click.landingPath || '/landing'}?ext_info=${click.ext_info}`;
+  }
+
+  // 为每个配置的转化类型创建回传数据
+  const conversionTypes = autoConfig.types.map(newType => {
+    const conversionData = {
+      logidUrl,
+      newType: parseInt(newType)
+    };
+    if (click.ext_info) conversionData.ext_info = click.ext_info;
+    return conversionData;
+  });
+
+  // 延迟执行（如果配置了延迟）
+  const doUpload = async () => {
+    try {
+      const response = await fetch(data.config.apiUrl || BAIDU_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          token,
+          conversionTypes
+        })
+      });
+
+      const result = await response.json();
+
+      // 记录回传历史
+      const freshData = readData('conversions.json');
+      const record = {
+        id: Date.now(),
+        clickId: click.id,
+        conversionTypes,
+        result,
+        isAuto: true,
+        createTime: new Date().toISOString()
+      };
+      freshData.conversions.push(record);
+      writeData('conversions.json', freshData);
+
+      console.log(`[自动回传] 点击ID: ${click.id}, 类型: ${autoConfig.types.join(',')}, 状态: ${result?.header?.status === 0 ? '成功' : '失败'}`);
+      return result;
+    } catch (error) {
+      console.error(`[自动回传] 失败: ${error.message}`);
+      return { error: error.message };
+    }
+  };
+
+  if (autoConfig.delay > 0) {
+    setTimeout(doUpload, autoConfig.delay * 1000);
+    return { scheduled: true, delay: autoConfig.delay };
+  } else {
+    return doUpload();
+  }
+}
+
+// 导出自动回传函数
+router.autoUploadConversion = autoUploadConversion;
+
 // 获取转化类型列表
 router.get('/types', (req, res) => {
   const { platform } = req.query; // 可选参数: search 或 feed

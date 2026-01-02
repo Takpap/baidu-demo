@@ -5,6 +5,7 @@ class ConversionList extends HTMLElement {
     this.history = [];
     this.clicks = [];
     this.config = { token: '', apiUrl: '' };
+    this.autoUploadConfig = { enabled: false, types: [], delay: 0 };
     this.conversionTypes = {};
     this.pagination = { page: 1, pageSize: 20, total: 0 };
     this.loading = true;
@@ -18,14 +19,16 @@ class ConversionList extends HTMLElement {
     this.loading = true;
     this.render();
 
-    const [configRes, typesRes, historyRes, clicksRes] = await Promise.all([
+    const [configRes, autoConfigRes, typesRes, historyRes, clicksRes] = await Promise.all([
       api.get('/conversion/config'),
+      api.get('/conversion/auto-upload/config'),
       api.get('/conversion/types'),
       api.get(`/conversion/history?page=${this.pagination.page}&pageSize=${this.pagination.pageSize}`),
       api.get('/click/list?pageSize=100')
     ]);
 
     if (configRes.code === 0) this.config = configRes.data;
+    if (autoConfigRes.code === 0) this.autoUploadConfig = autoConfigRes.data;
     if (typesRes.code === 0) this.conversionTypes = typesRes.data;
     if (historyRes.code === 0) {
       this.history = historyRes.data.list;
@@ -62,6 +65,61 @@ class ConversionList extends HTMLElement {
         const res = await api.post('/conversion/config', data);
         if (res.code === 0) {
           showToast('配置保存成功');
+          this.loadData();
+        } else {
+          showToast(res.message, 'error');
+        }
+      }
+    });
+  }
+
+  openAutoUploadConfigModal() {
+    const typeOptions = Object.entries(this.conversionTypes).map(([value, typeInfo]) => ({
+      value: parseInt(value),
+      label: `${value} - ${typeof typeInfo === 'object' ? typeInfo.name : typeInfo}`,
+      selected: this.autoUploadConfig.types.includes(parseInt(value))
+    }));
+
+    // 创建自定义内容用于多选
+    const content = `
+      <div class="space-y-4">
+        <div>
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" id="auto-enabled" class="w-4 h-4 text-blue-600" ${this.autoUploadConfig.enabled ? 'checked' : ''}>
+            <span class="text-gray-700">启用自动回传</span>
+          </label>
+          <p class="text-sm text-gray-500 mt-1">启用后，当有新的点击访问落地页时，将自动回传配置的转化类型</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">自动回传的转化类型</label>
+          <div class="max-h-48 overflow-y-auto border rounded-lg p-2 space-y-1">
+            ${typeOptions.map(opt => `
+              <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                <input type="checkbox" class="type-checkbox w-4 h-4 text-blue-600" value="${opt.value}" ${opt.selected ? 'checked' : ''}>
+                <span class="text-sm text-gray-700">${opt.label}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">延迟回传（秒）</label>
+          <input type="number" id="auto-delay" class="w-full px-3 py-2 border rounded-lg" value="${this.autoUploadConfig.delay || 0}" min="0" placeholder="0表示立即回传">
+          <p class="text-sm text-gray-500 mt-1">设置延迟可以模拟用户在页面停留后再转化的场景</p>
+        </div>
+      </div>
+    `;
+
+    EventBus.emit('modal:open', {
+      title: '自动回传配置',
+      content,
+      onConfirm: async () => {
+        const enabled = document.getElementById('auto-enabled').checked;
+        const delay = parseInt(document.getElementById('auto-delay').value) || 0;
+        const types = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(cb => parseInt(cb.value));
+
+        const res = await api.post('/conversion/auto-upload/config', { enabled, types, delay });
+        if (res.code === 0) {
+          showToast('自动回传配置已保存');
           this.loadData();
         } else {
           showToast(res.message, 'error');
@@ -234,6 +292,11 @@ class ConversionList extends HTMLElement {
   }
 
   render() {
+    const autoTypesDisplay = this.autoUploadConfig.types.map(t => {
+      const typeInfo = this.conversionTypes[t];
+      return typeInfo ? (typeof typeInfo === 'object' ? typeInfo.name : typeInfo) : t;
+    }).join('、') || '未配置';
+
     this.innerHTML = `
       <div class="space-y-6">
         <!-- 配置卡片 -->
@@ -257,6 +320,36 @@ class ConversionList extends HTMLElement {
               <p class="text-gray-800 text-sm truncate">${this.config.apiUrl || 'https://ocpc.baidu.com/ocpcapi/api/uploadConvertData'}</p>
             </div>
           </div>
+        </div>
+
+        <!-- 自动回传配置卡片 -->
+        <div class="bg-white rounded-lg shadow p-4">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-3">
+              <h3 class="text-lg font-semibold text-gray-800">自动回传</h3>
+              ${this.autoUploadConfig.enabled
+                ? '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">已启用</span>'
+                : '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600">未启用</span>'}
+            </div>
+            <button class="auto-config-btn px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+              配置自动回传
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <label class="text-gray-500">自动回传类型</label>
+              <p class="text-gray-800">${autoTypesDisplay}</p>
+            </div>
+            <div>
+              <label class="text-gray-500">延迟时间</label>
+              <p class="text-gray-800">${this.autoUploadConfig.delay > 0 ? this.autoUploadConfig.delay + '秒' : '立即回传'}</p>
+            </div>
+          </div>
+          ${this.autoUploadConfig.enabled ? `
+            <div class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+              <strong>提示：</strong>当用户访问落地页（如 /landing?bd_vid=xxx）时，系统将自动回传配置的转化类型到百度
+            </div>
+          ` : ''}
         </div>
 
         <!-- 操作按钮 -->
@@ -325,6 +418,7 @@ class ConversionList extends HTMLElement {
                       <td class="px-4 py-3 text-sm text-gray-900">
                         ${h.id}
                         ${h.isMock ? '<span class="ml-1 px-1 py-0.5 text-xs bg-gray-200 text-gray-600 rounded">模拟</span>' : ''}
+                        ${h.isAuto ? '<span class="ml-1 px-1 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">自动</span>' : ''}
                       </td>
                       <td class="px-4 py-3 text-sm text-gray-900">${h.conversionTypes?.length || 0}条</td>
                       <td class="px-4 py-3 text-sm text-gray-600">
@@ -362,6 +456,7 @@ class ConversionList extends HTMLElement {
 
     // 绑定事件
     this.querySelector('.config-btn')?.addEventListener('click', () => this.openConfigModal());
+    this.querySelector('.auto-config-btn')?.addEventListener('click', () => this.openAutoUploadConfigModal());
     this.querySelector('.upload-btn')?.addEventListener('click', () => {
       if (this.config.token) {
         this.openUploadModal();
