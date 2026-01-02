@@ -1,0 +1,25 @@
+{
+  "conversions": [
+    {
+      "id": 1767348831431,
+      "conversionTypes": [
+        {
+          "logidUrl": "https://baidu.tempocc.cn/landing?bd_vid=test123",
+          "newType": 3
+        }
+      ],
+      "result": {
+        "header": {
+          "desc": "success",
+          "status": 0
+        }
+      },
+      "isMock": true,
+      "createTime": "2026-01-02T10:13:51.431Z"
+    }
+  ],
+  "config": {
+    "token": "qLZl74UWBEDy9hyLb9UKLSIKkwJolvaa@69kOqjSXAx1st1VORXZykLkIRLRyivcz",
+    "apiUrl": "https://ocpc.baidu.com/ocpcapi/api/uploadConvertData"
+  }
+}

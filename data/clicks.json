@@ -51,6 +51,33 @@
       "referer": "",
       "realIp": "::1",
       "realUa": "curl/8.7.1"
+    },
+    {
+      "id": 1767347039310,
+      "landingPath": "/landing/",
+      "channel_code": "WXQYJCTT-AXSYAAAAAB1000117",
+      "aid": "12345",
+      "pid": "100001",
+      "uid": "200001",
+      "useid": "",
+      "click_id": "test123",
+      "idfa": "",
+      "imei_md5": "",
+      "androidid": "",
+      "androidid_md5": "",
+      "ip": "",
+      "ua": "",
+      "os": "",
+      "ts": "",
+      "ext_info": "",
+      "mac_md5": "",
+      "mac": "",
+      "deeplink_url": "",
+      "bd_vid": "testvid",
+      "recordTime": "2026-01-02T09:43:59.310Z",
+      "referer": "",
+      "realIp": "::1",
+      "realUa": "curl/8.7.1"
     }
   ]
 }

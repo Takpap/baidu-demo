@@ -27,6 +27,7 @@ const reportRouter = require('./routes/report');
 const trackingRouter = require('./routes/tracking');
 const promotionUrlRouter = require('./routes/promotionUrl');
 const clickRouter = require('./routes/click');
+const conversionRouter = require('./routes/conversion');
 
 app.use('/api/account', accountRouter);
 app.use('/api/campaign', campaignRouter);
@@ -37,6 +38,7 @@ app.use('/api/report', reportRouter);
 app.use('/api/tracking', trackingRouter);
 app.use('/api/promotion-url', promotionUrlRouter);
 app.use('/api/click', clickRouter);
+app.use('/api/conversion', conversionRouter);
 
 // 落地页路由 - 接收百度监测参数并记录
 const landingRouter = require('./routes/landing');

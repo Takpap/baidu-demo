@@ -56,13 +56,16 @@ function showToast(message, type = 'success') {
 class AppRoot extends HTMLElement {
   constructor() {
     super();
-    this.currentPage = 'campaign';
+    // 从 localStorage 读取上次选中的菜单，默认为 campaign
+    this.currentPage = localStorage.getItem('baidu_current_page') || 'campaign';
   }
 
   connectedCallback() {
     this.render();
     EventBus.on('navigate', (page) => {
       this.currentPage = page;
+      // 保存到 localStorage
+      localStorage.setItem('baidu_current_page', page);
       this.render();
     });
   }
@@ -89,6 +92,7 @@ class AppRoot extends HTMLElement {
       tracking: '<tracking-list></tracking-list>',
       'promotion-url': '<promotion-url-list></promotion-url-list>',
       click: '<click-list></click-list>',
+      conversion: '<conversion-list></conversion-list>',
       report: '<report-view></report-view>'
     };
     return pages[this.currentPage] || pages.campaign;

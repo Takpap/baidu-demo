@@ -22,6 +22,7 @@ class AppNav extends HTMLElement {
       { key: 'tracking', label: '监测链接' },
       { key: 'promotion-url', label: '推广链接' },
       { key: 'click', label: '点击记录' },
+      { key: 'conversion', label: '转化回传' },
       { key: 'report', label: '数据报告' }
     ];
 
