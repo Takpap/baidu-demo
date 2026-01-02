@@ -1,8 +1,10 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
 // 中间件
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../public')));
 
 // 模拟百度营销 API 认证中间件
 app.use('/api', (req, res, next) => {
@@ -24,6 +26,7 @@ const creativeRouter = require('./routes/creative');
 const reportRouter = require('./routes/report');
 const trackingRouter = require('./routes/tracking');
 const promotionUrlRouter = require('./routes/promotionUrl');
+const clickRouter = require('./routes/click');
 
 app.use('/api/account', accountRouter);
 app.use('/api/campaign', campaignRouter);
@@ -33,6 +36,7 @@ app.use('/api/creative', creativeRouter);
 app.use('/api/report', reportRouter);
 app.use('/api/tracking', trackingRouter);
 app.use('/api/promotion-url', promotionUrlRouter);
+app.use('/api/click', clickRouter);
 
 // 模拟获取 token
 app.post('/api/auth/token', (req, res) => {
@@ -58,7 +62,7 @@ app.get('/health', (req, res) => {
 });
 
 // API 文档
-app.get('/', (req, res) => {
+app.get('/api-docs', (req, res) => {
   res.json({
     name: '百度营销平台 API 模拟服务',
     version: '1.0.0',
@@ -119,13 +123,22 @@ app.get('/', (req, res) => {
         'PUT /api/promotion-url/:urlId': '更新推广链接',
         'DELETE /api/promotion-url/:urlId': '删除推广链接',
         'POST /api/promotion-url/validate': '验证链接有效性'
+      },
+      click: {
+        'GET /api/click/record': '记录点击(接收百度监测参数)',
+        'POST /api/click/record': '记录点击(POST方式)',
+        'GET /api/click/list': '获取点击记录列表',
+        'GET /api/click/detail/:id': '获取点击记录详情',
+        'GET /api/click/stats': '获取点击统计',
+        'DELETE /api/click/clear': '清空点击记录'
       }
     }
   });
 });
 
-const PORT = 6000;
+const PORT = 6001;
 app.listen(PORT, () => {
   console.log(`百度营销平台模拟服务已启动: http://localhost:${PORT}`);
-  console.log(`API 文档: http://localhost:${PORT}/`);
+  console.log(`管理界面: http://localhost:${PORT}/`);
+  console.log(`API 文档: http://localhost:${PORT}/api-docs`);
 });

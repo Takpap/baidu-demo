@@ -2,6 +2,29 @@ const express = require('express');
 const router = express.Router();
 const { readData, writeData } = require('../utils/dataStore');
 
+// 百度营销监测参数字段说明
+const TRACKING_PARAMS = {
+  channel_code: '渠道码',
+  aid: '创意ID (IDEA_ID)',
+  pid: '计划ID (PLAN_ID)',
+  uid: '单元ID (UNIT_ID)',
+  useid: '用户ID (USER_ID)',
+  click_id: '点击ID (CLICK_ID)',
+  idfa: 'iOS广告标识符',
+  imei_md5: 'IMEI MD5',
+  androidid: '安卓ID原始值',
+  androidid_md5: '安卓ID MD5',
+  ip: '用户IP',
+  ua: 'User Agent',
+  os: '操作系统',
+  ts: '时间戳',
+  ext_info: '扩展信息',
+  mac_md5: 'MAC地址MD5',
+  mac: 'MAC地址',
+  deeplink_url: '深度链接URL',
+  bd_vid: '百度访问标识'
+};
+
 // 监测类型: 1-基础监测, 2-转化监测, 3-深度转化监测
 
 // 获取监测链接列表
@@ -87,15 +110,29 @@ router.delete('/:trackingId', (req, res) => {
 
 // 生成带监测参数的完整链接
 router.post('/generate', (req, res) => {
-  const { baseUrl, campaignId, adgroupId, creativeId, keyword } = req.body;
+  const { baseUrl, channelCode } = req.body;
 
+  // 生成带百度营销宏参数的链接
   const params = new URLSearchParams({
-    bd_vid: `bd_${Date.now()}`,
-    campaignid: campaignId || '',
-    adgroupid: adgroupId || '',
-    creativeid: creativeId || '',
-    keyword: keyword || '',
-    timestamp: Date.now()
+    channel_code: channelCode || 'WXQYJCTT-AXSYAAAAAB1000117',
+    aid: '__IDEA_ID__',
+    pid: '__PLAN_ID__',
+    uid: '__UNIT_ID__',
+    useid: '__USER_ID__',
+    click_id: '__CLICK_ID__',
+    idfa: '__IDFA__',
+    imei_md5: '__IMEI__',
+    androidid: '__ANDROIDID1__',
+    androidid_md5: '__ANDROIDID__',
+    ip: '__IP__',
+    ua: '__UA__',
+    os: '__OS__',
+    ts: '__TS__',
+    ext_info: '__EXT_INFO__',
+    mac_md5: '__MAC1__',
+    mac: '__MAC__',
+    deeplink_url: '__DEEPLINK_URL__',
+    bd_vid: '__BD_VID__'
   });
 
   const generatedUrl = `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${params.toString()}`;
@@ -106,8 +143,18 @@ router.post('/generate', (req, res) => {
     data: {
       originalUrl: baseUrl,
       generatedUrl,
-      params: Object.fromEntries(params)
+      params: Object.fromEntries(params),
+      paramsDescription: TRACKING_PARAMS
     }
+  });
+});
+
+// 获取监测参数说明
+router.get('/params/description', (req, res) => {
+  res.json({
+    code: 0,
+    message: 'success',
+    data: TRACKING_PARAMS
   });
 });
 

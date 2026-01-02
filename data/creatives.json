@@ -6,8 +6,8 @@
       "title": "百度推广-让客户主动找上门",
       "description1": "精准投放，按效果付费",
       "description2": "专业团队，一对一服务",
-      "pcDestinationUrl": "https://example.com/landing1",
-      "mobileDestinationUrl": "https://m.example.com/landing1",
+      "pcDestinationUrl": "https://baidu.tempocc.cn/landing1",
+      "mobileDestinationUrl": "https://baidu.tempocc.cn/landing1",
       "status": 1,
       "createTime": "2024-01-04 10:00:00"
     },
@@ -17,8 +17,8 @@
       "title": "网络营销推广-效果看得见",
       "description1": "覆盖全网用户",
       "description2": "智能优化，提升转化",
-      "pcDestinationUrl": "https://example.com/landing2",
-      "mobileDestinationUrl": "https://m.example.com/landing2",
+      "pcDestinationUrl": "https://baidu.tempocc.cn/landing2",
+      "mobileDestinationUrl": "https://baidu.tempocc.cn/landing2",
       "status": 1,
       "createTime": "2024-01-04 10:30:00"
     }

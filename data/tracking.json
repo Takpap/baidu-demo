@@ -4,7 +4,7 @@
       "trackingId": 500001,
       "campaignId": 100001,
       "trackingName": "官网落地页监测",
-      "trackingUrl": "https://example.com/landing?utm_source=baidu&utm_medium=cpc&utm_campaign={campaignid}&utm_content={creative}&utm_term={keyword}",
+      "trackingUrl": "https://baidu.tempocc.cn/landing?channel_code=WXQYJCTT-AXSYAAAAAB1000117&aid=__IDEA_ID__&pid=__PLAN_ID__&uid=__UNIT_ID__&useid=__USER_ID__&click_id=__CLICK_ID__&idfa=__IDFA__&imei_md5=__IMEI__&androidid=__ANDROIDID1__&androidid_md5=__ANDROIDID__&ip=__IP__&ua=__UA__&os=__OS__&ts=__TS__&ext_info=__EXT_INFO__&mac_md5=__MAC1__&mac=__MAC__&deeplink_url=__DEEPLINK_URL__&bd_vid=__BD_VID__",
       "trackingType": 1,
       "status": 1,
       "createTime": "2024-01-05 10:00:00"
@@ -13,7 +13,7 @@
       "trackingId": 500002,
       "campaignId": 100001,
       "trackingName": "活动页监测",
-      "trackingUrl": "https://example.com/promo?bd_vid={bd_vid}&callback={callback}",
+      "trackingUrl": "https://baidu.tempocc.cn/promo?channel_code=WXQYJCTT-AXSYAAAAAB1000118&aid=__IDEA_ID__&pid=__PLAN_ID__&uid=__UNIT_ID__&useid=__USER_ID__&click_id=__CLICK_ID__&idfa=__IDFA__&imei_md5=__IMEI__&androidid=__ANDROIDID1__&androidid_md5=__ANDROIDID__&ip=__IP__&ua=__UA__&os=__OS__&ts=__TS__&ext_info=__EXT_INFO__&mac_md5=__MAC1__&mac=__MAC__&deeplink_url=__DEEPLINK_URL__&bd_vid=__BD_VID__",
       "trackingType": 2,
       "status": 1,
       "createTime": "2024-01-05 11:00:00"

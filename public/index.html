@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>百度营销平台 - 模拟系统</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            baidu: {
+              blue: '#2932e1',
+              light: '#4e6ef2'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    [x-cloak] { display: none !important; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <app-root></app-root>
+
+  <!-- Web Components -->
+  <script src="/js/components/app-root.js"></script>
+  <script src="/js/components/app-nav.js"></script>
+  <script src="/js/components/app-toast.js"></script>
+  <script src="/js/components/campaign-list.js"></script>
+  <script src="/js/components/adgroup-list.js"></script>
+  <script src="/js/components/keyword-list.js"></script>
+  <script src="/js/components/creative-list.js"></script>
+  <script src="/js/components/tracking-list.js"></script>
+  <script src="/js/components/promotion-url-list.js"></script>
+  <script src="/js/components/report-view.js"></script>
+  <script src="/js/components/click-list.js"></script>
+  <script src="/js/components/modal-dialog.js"></script>
+</body>
+</html>
